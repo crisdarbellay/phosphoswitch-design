@@ -13,7 +13,7 @@ Target: LMNA Y45 phosphorylated by Src kinase; ±29 aa construct (59 aa),
 """
 
 __version__ = "0.1.0"
-__author__ = "Cris Darby"
+__author__ = "Cris Darbellay"
 
 from .mechanism import (
     PHOS_BINDERS,
