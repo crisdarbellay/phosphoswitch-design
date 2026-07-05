@@ -12,15 +12,23 @@ Multi-state protein design pipeline for bidirectional phosphoswitches.
 ---
 
 <p align="center">
-  <img src="examples/figures/design_structures_panel.png" width="860"
-       alt="Bidirectional phosphoswitch design: H1 and H2 LigandMPNN backbone states, apo vs phospho"/>
-  <br><em>LigandMPNN design backbone states for H1 (blue) and H2 (green). <strong>H1</strong>: phosphorylation stabilises the straight α-helix. <strong>H2</strong>: phosphorylation drives the N-terminal segment into a two-helix hairpin fold. Orange = fixed LAVYIDR kinase-recognition motif · yellow sphere = Y45 phosphosite.</em>
+  <img src="examples/figures/design_structures_af3_panel.png" width="880"
+       alt="AlphaFold3 apo vs phospho predictions for three designed candidates: H1 switch, H2 switch, and the unusual beta-to-helix case"/>
+  <br><em>
+  AlphaFold3 predictions, apo (blue border) vs phospho/PTR30 (red border), for three representative designs.
+  <strong>Top row (cand_18756, H1):</strong> apo = helix + β-sheet mixed; phosphorylation collapses it to a pure 86% α-helix.
+  <strong>Middle row (cand_03609, H2):</strong> apo = continuous straight helix; phosphorylation induces kinking/hairpin topology.
+  <strong>Bottom row (cand_12260, unusual):</strong> apo = 73% β-sheet — nearly full β-strand; phosphorylation nucleates a nascent helix.
+  <strong>Red sticks</strong> = Y30/PTR30 phosphosite · <strong>orange sticks</strong> = LAVYIDR motif (resi 27–33) ·
+  <strong>cyan sticks</strong> = Arg/Lys contacting phosphate (>50% MD contact fraction).
+  All top-36 candidates confirmed <strong>STRONG_SWITCH</strong> independently by both Boltz 2.2 and AlphaFold3.
+  </em>
 </p>
 
 <p align="center">
   <img src="examples/figures/design_stats_pub.png" width="820"
        alt="36 top designs ranked by Boltz RMSD and conformational specificity scatter"/>
-  <br><em>Left: 36 top Boltz-ranked designs — top hit 22.4 Å apo↔phos RMSD, far above the WT baseline. Right: conformational specificity scatter — designs with both tight apo-spread and tight phospho-spread are ideal switches.</em>
+  <br><em>Left: 36 top Boltz-ranked designs — top hit 22.4 Å apo↔phos RMSD, all independently confirmed STRONG_SWITCH by AlphaFold3. Right: conformational specificity scatter — designs with both tight apo-spread and tight phospho-spread are ideal switches.</em>
 </p>
 
 ---
@@ -513,9 +521,9 @@ physically meaningful — only the differential matters.
 If you use this pipeline, please cite:
 
 ```
-Darby, C. (2026). phosphoswitch-design: multi-state protein design pipeline
+Darbellay, C. (2026). phosphoswitch-design: multi-state protein design pipeline
 for bidirectional phosphoswitches. GitHub.
-https://github.com/your-username/phosphoswitch-design
+https://github.com/crisdarbellay/phosphoswitch-design
 ```
 
 And the underlying tools:
