@@ -12,15 +12,17 @@ Multi-state protein design pipeline for bidirectional phosphoswitches.
 ---
 
 <p align="center">
-  <img src="examples/figures/Fig3_RMSD_Ridgeline.png" width="520" alt="RMSD distributions: designed candidates vs WT, apo vs phospho"/>
-  <br><em>Designed candidates (coloured) show large phospho-driven RMSD shifts vs WT (grey). Top hit: 22.4 Å Boltz RMSD.</em>
+  <img src="examples/figures/panel_bidirectional_apo_vs_phos.png" width="820"
+       alt="Bidirectional phosphoswitch design: H1 and H2 candidates, apo vs phospho AF3 predictions"/>
+  <br><em>AF3 predictions (PTR = phosphotyrosine) for two complementary designs. <strong>H1</strong> (blue): phospho stabilizes the straight helix. <strong>H2</strong> (green): phospho stabilizes the hairpin fold. Orange = fixed LAVYIDR motif · spheres = Y45 phosphosite.</em>
 </p>
 
 <p align="center">
-  <img src="examples/figures/Fig2_Faceted_Scatter.png" width="440" alt="4-state Rosetta ddG_switch vs Boltz RMSD"/>
-  &nbsp;
-  <img src="examples/figures/Fig4_CD_Spectra.png" width="380" alt="CD spectra: LMNA and MAPRE1 ± phosphorylation"/>
+  <img src="examples/figures/Fig3_RMSD_Ridgeline.png" width="500" alt="RMSD distributions: designed candidates vs WT"/>
+  &nbsp;&nbsp;
+  <img src="examples/figures/Fig5_Pred_vs_Exp.png" width="360" alt="Predicted switch score vs experimental CD signal"/>
 </p>
+<p align="center"><em>Left: top designs show large phospho-driven RMSD shifts (up to 22.4 Å) vs WT. Right: predicted ddG_switch correlates with experimental CD signal.</em></p>
 
 ---
 
