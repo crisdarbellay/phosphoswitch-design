@@ -12,17 +12,16 @@ Multi-state protein design pipeline for bidirectional phosphoswitches.
 ---
 
 <p align="center">
-  <img src="examples/figures/panel_bidirectional_apo_vs_phos.png" width="820"
-       alt="Bidirectional phosphoswitch design: H1 and H2 candidates, apo vs phospho AF3 predictions"/>
-  <br><em>AF3 predictions (PTR = phosphotyrosine) for two complementary designs. <strong>H1</strong> (blue): phospho stabilizes the straight helix. <strong>H2</strong> (green): phospho stabilizes the hairpin fold. Orange = fixed LAVYIDR motif · spheres = Y45 phosphosite.</em>
+  <img src="examples/figures/design_structures_panel.png" width="860"
+       alt="Bidirectional phosphoswitch design: H1 and H2 LigandMPNN backbone states, apo vs phospho"/>
+  <br><em>LigandMPNN design backbone states for H1 (blue) and H2 (green). <strong>H1</strong>: phosphorylation stabilises the straight α-helix. <strong>H2</strong>: phosphorylation drives the N-terminal segment into a two-helix hairpin fold. Orange = fixed LAVYIDR kinase-recognition motif · yellow sphere = Y45 phosphosite.</em>
 </p>
 
 <p align="center">
-  <img src="examples/figures/Fig3_RMSD_Ridgeline.png" width="500" alt="RMSD distributions: designed candidates vs WT"/>
-  &nbsp;&nbsp;
-  <img src="examples/figures/Fig5_Pred_vs_Exp.png" width="360" alt="Predicted switch score vs experimental CD signal"/>
+  <img src="examples/figures/design_stats_pub.png" width="820"
+       alt="36 top designs ranked by Boltz RMSD and conformational specificity scatter"/>
+  <br><em>Left: 36 top Boltz-ranked designs — top hit 22.4 Å apo↔phos RMSD, far above the WT baseline. Right: conformational specificity scatter — designs with both tight apo-spread and tight phospho-spread are ideal switches.</em>
 </p>
-<p align="center"><em>Left: top designs show large phospho-driven RMSD shifts (up to 22.4 Å) vs WT. Right: predicted ddG_switch correlates with experimental CD signal.</em></p>
 
 ---
 
