@@ -11,6 +11,19 @@ Multi-state protein design pipeline for bidirectional phosphoswitches.
 
 ---
 
+<p align="center">
+  <img src="examples/figures/Fig3_RMSD_Ridgeline.png" width="520" alt="RMSD distributions: designed candidates vs WT, apo vs phospho"/>
+  <br><em>Designed candidates (coloured) show large phospho-driven RMSD shifts vs WT (grey). Top hit: 22.4 Å Boltz RMSD.</em>
+</p>
+
+<p align="center">
+  <img src="examples/figures/Fig2_Faceted_Scatter.png" width="440" alt="4-state Rosetta ddG_switch vs Boltz RMSD"/>
+  &nbsp;
+  <img src="examples/figures/Fig4_CD_Spectra.png" width="380" alt="CD spectra: LMNA and MAPRE1 ± phosphorylation"/>
+</p>
+
+---
+
 ## Table of Contents
 
 1. [Biology Background](#biology)
