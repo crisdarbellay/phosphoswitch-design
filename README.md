@@ -13,12 +13,13 @@ Multi-state protein design pipeline for bidirectional phosphoswitches.
 
 <p align="center">
   <img src="examples/figures/design_structures_af3_panel.png" width="880"
-       alt="AlphaFold3 apo vs phospho predictions for three designed candidates: H1 switch, H2 switch, and the unusual beta-to-helix case"/>
+       alt="AlphaFold3 apo vs phospho predictions for four designed candidates: two H1 switches, one H2 switch, and the unusual beta-to-helix case"/>
   <br><em>
-  AlphaFold3 predictions, apo (blue border) vs phospho/PTR30 (red border), for three representative designs.
-  <strong>Top row (cand_18756, H1):</strong> apo = helix + β-sheet mixed; phosphorylation collapses it to a pure 86% α-helix.
-  <strong>Middle row (cand_03609, H2):</strong> apo = continuous straight helix; phosphorylation induces kinking/hairpin topology.
-  <strong>Bottom row (cand_12260, unusual):</strong> apo = 73% β-sheet — nearly full β-strand; phosphorylation nucleates a nascent helix.
+  AlphaFold3 predictions, apo (blue border) vs phospho/PTR30 (red border), for four representative designs.
+  <strong>Row 1 (cand_18756, H1):</strong> apo = mixed helix/β; phosphorylation → pure 86% α-helix.
+  <strong>Row 2 (cand_19719, H1 — clearest):</strong> apo = kinked helix at Y30; phosphorylation → continuous straight helix (86.4%).
+  <strong>Row 3 (cand_03609, H2):</strong> apo = straight helix; phosphorylation → kinked hairpin.
+  <strong>Row 4 (cand_12260, unusual):</strong> apo = 73% β-sheet; phosphorylation nucleates helix.
   <strong>Red sticks</strong> = Y30/PTR30 phosphosite · <strong>orange sticks</strong> = LAVYIDR motif (resi 27–33) ·
   <strong>cyan sticks</strong> = Arg/Lys contacting phosphate (>50% MD contact fraction).
   All top-36 candidates confirmed <strong>STRONG_SWITCH</strong> independently by both Boltz 2.2 and AlphaFold3.
@@ -39,13 +40,14 @@ Multi-state protein design pipeline for bidirectional phosphoswitches.
 2. [H1 vs H2 Hypotheses](#hypotheses)
 3. [4-State Thermodynamic Cycle](#thermodynamic-cycle)
 4. [Pipeline Overview](#pipeline)
-5. [Installation](#installation)
-6. [Quick Start — LMNA Y45](#quickstart)
-7. [Configuration](#configuration)
-8. [Output Files](#outputs)
-9. [What ddG_switch Means Biologically](#ddg-biology)
-10. [Known Artifacts and Caveats](#caveats)
-11. [Software Versions](#software)
+5. [Round 2 v3 — WT LMNA Redesign](#round2v3)
+6. [Installation](#installation)
+7. [Quick Start — LMNA Y45](#quickstart)
+8. [Configuration](#configuration)
+9. [Output Files](#outputs)
+10. [What ddG_switch Means Biologically](#ddg-biology)
+11. [Known Artifacts and Caveats](#caveats)
+12. [Software Versions](#software)
 
 ---
 
@@ -209,6 +211,54 @@ Phase 1 PDBs (pre-generated):
   08_select_final.py      Consensus ranking + final selection
   Output: 8-12 wet-lab candidates + FASTAs + codon-optimised DNA
 ```
+
+---
+
+## Round 2 v3 — WT LMNA Redesign <a name="round2v3"></a>
+
+This second design campaign uses an expanded backbone library covering the full
+LMNA Y45 conformational landscape, combining directed-evolution-inspired sampling
+with multi-state inverse folding.
+
+### Backbone library
+
+| Track | Direction | Backbones | Description |
+|---|---|---|---|
+| A | straight → kink | 44 | phos-stabilised helix kinked at Y30 |
+| D | kink → straight | 44 | phos-stabilised straight helix from kinked apo |
+| B | hairpin (H2 switch) | 1 | original H2 backbone |
+| C | beta/unusual | 1 | non-helix reference |
+| **Total** | | **90** | |
+
+### Funnel statistics
+
+| Stage | Count | Details |
+|---|---|---|
+| Stage 02 (LigandMPNN) | ~1.68 M | 4 tracks × subspaces × temperatures |
+| Stage 03 (plausibility filter) | ~420 k | mechanism score + contact filter |
+| Stage 04 (Rosetta 4-state) | **50,488** | N=5 replicates, 16 workers, ~25 h |
+| Stage 04 hits (ddG_switch < −5) | **1,194** | |
+| Stage 05 top-1000 Boltz inputs | **1,000** | single-seq mode, N=3 samples each |
+| Stage 05 Boltz predictions | **in progress** | ~32 s/candidate, ETA ~9 h from launch |
+| Stage 06 AF3 (planned) | top 50 by Boltz RMSD | submit to AlphaFold3 server |
+
+### What changed from round 1
+
+- **90 backbone scaffolds** instead of 4: covers the full straight↔kink envelope sampled by MD
+- **Boltz 2.2** run in **single-sequence mode** (no MSA) — much faster (~32 s vs ~3 min), confirmed
+  comparable accuracy for short peptides in validation experiments
+- Scoring script `26b_rescore_boltz_with_af3_metric.py` computes the same Cα RMSD metric
+  used for the round-1 paper_bundle, enabling direct comparison
+- All 50,488 Rosetta-scored candidates retained in `04_speedtest/` for retrospective analysis
+
+### Current status (2026-07)
+
+Boltz predictions running on 1,000 top v3 candidates. After completion:
+
+1. Run `26_score_boltz_predictions.py` → Boltz RMSD + pTM ranking
+2. Run `26b_rescore_boltz_with_af3_metric.py` → combined score vs round-1 paper_bundle
+3. Submit top 50 to AF3 server for independent validation
+4. Update this README with final hit counts
 
 ---
 
