@@ -1,0 +1,66 @@
+# ── Python build artifacts ───────────────────────────────────────────────────
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+*.egg-info/
+*.egg
+dist/
+build/
+.eggs/
+.venv/
+venv/
+env/
+*.whl
+
+# ── IDE / editor ─────────────────────────────────────────────────────────────
+.vscode/
+.idea/
+*.swp
+*.swo
+.DS_Store
+
+# ── Test / coverage ──────────────────────────────────────────────────────────
+.pytest_cache/
+.coverage
+htmlcov/
+*.xml
+
+# ── Pipeline outputs (large; never commit) ────────────────────────────────────
+outputs/
+output/
+# Specific large output types
+*.fa
+*.fasta
+*.pdb
+*.json
+*.csv
+*.npz
+*.pkl
+*.pt
+
+# Exceptions — keep tracked examples (if any)
+!examples/*.fa
+!examples/*.csv
+
+# ── Rosetta cache ─────────────────────────────────────────────────────────────
+*_rep???.json
+04_rosetta_cache/
+
+# ── Secrets / credentials ─────────────────────────────────────────────────────
+.env
+*.key
+*_secret*
+
+# ── Jupyter notebooks checkpoints ─────────────────────────────────────────────
+.ipynb_checkpoints/
+__pycache__/
+*.pyc
+.egg-info/
+.pytest_cache/
+outputs/
+outputs_motif_fixed*/
+*.log
+*.xtc
+*.trr
+*.tpr

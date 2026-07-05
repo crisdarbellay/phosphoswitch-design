@@ -1,0 +1,65 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "phosphoswitch-design"
+version = "0.1.0"
+description = "Multi-state protein design pipeline for bidirectional phosphoswitches (LMNA Y45 / Src kinase)"
+readme = "README.md"
+requires-python = ">=3.9"
+license = {text = "MIT"}
+authors = [
+    {name = "Cris Darby", email = "cris.darby1@gmail.com"},
+]
+keywords = [
+    "protein design",
+    "phosphoswitch",
+    "LigandMPNN",
+    "PyRosetta",
+    "ColabFold",
+    "multi-state design",
+    "LMNA",
+    "Src kinase",
+    "thermodynamic cycle",
+    "NMR",
+]
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Intended Audience :: Science/Research",
+    "Topic :: Scientific/Engineering :: Bio-Informatics",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+]
+dependencies = [
+    "pyyaml>=6.0",
+    "numpy>=1.24",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=7.0",
+    "pytest-cov",
+]
+
+[project.scripts]
+psw-generate   = "phosphoswitch_design._cli:generate"
+psw-filter     = "phosphoswitch_design._cli:filter_seqs"
+psw-select     = "phosphoswitch_design._cli:select"
+psw-rosetta    = "phosphoswitch_design._cli:rosetta"
+psw-final      = "phosphoswitch_design._cli:final"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.setuptools.package-dir]
+"" = "src"
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+python_files = ["test_*.py"]
+python_classes = ["Test*"]
+python_functions = ["test_*"]
+addopts = "-v"

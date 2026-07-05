@@ -1,0 +1,41 @@
+# ============================================================================
+# requirements.txt — phosphoswitch-design
+# ============================================================================
+# Core dependencies (pip-installable)
+# ----------------------------------------------------------------------------
+pyyaml>=6.0
+numpy>=1.24
+
+# ============================================================================
+# Non-pip dependencies — install separately (see README.md for instructions)
+# ============================================================================
+
+# ── LigandMPNN v_32_010_25 ──────────────────────────────────────────────────
+# git clone https://github.com/dauparas/LigandMPNN
+# pip install -r LigandMPNN/requirements.txt
+# Download checkpoint: ligandmpnn_v_32_010_25.pt
+# Set config/lmna_y45.yaml: ligand_mpnn_dir, ligand_mpnn_checkpoint
+
+# ── PyRosetta ───────────────────────────────────────────────────────────────
+# Requires a free academic license: https://www.pyrosetta.org/
+# pip install pyrosetta  (after license activation)
+# OR: conda install -c rosettacommons pyrosetta
+
+# ── ColabFold 1.5.5 (AlphaFold2 bistability prediction) ────────────────────
+# pip install colabfold[alphafold]
+# OR: pip install git+https://github.com/sokrypton/ColabFold
+# Requires MSA server access or local MMseqs2 installation
+
+# ── Boltz 2.2.1 (structure prediction) ──────────────────────────────────────
+# pip install boltz==2.2.1
+# Requires weights download: boltz fetch
+
+# ── AlphaFold 3 3.0.3 (AF3 PTR ligand prediction) ──────────────────────────
+# AF3 requires separate access request: https://github.com/google-deepmind/alphafold3
+# Download af3_weights.npz and set model_dir in your AF3 config
+
+# ============================================================================
+# Development / testing
+# ============================================================================
+# pytest>=7.0
+# pytest-cov

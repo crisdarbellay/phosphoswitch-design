@@ -1,0 +1,162 @@
+# ============================================================================
+# lmna_y45.yaml — Phosphoswitch design configuration for LMNA Y45
+# ============================================================================
+#
+# LMNA construct biology
+# ----------------------
+# Target:  Lamin A (LMNA) Y45 phosphorylated by Src kinase
+# Construct: ±29 aa around Y45 → 59-residue peptide
+# Y45 of full-length LMNA maps to position 30 in this construct
+#
+# Two competing mechanistic hypotheses:
+#   H1: phosphorylation of Y45 STABILISES the STRAIGHT (extended helix) conformation
+#       → Src phospho drives nuclear lamina disassembly by rigidifying the rod domain
+#   H2: phosphorylation of Y45 STABILISES the HAIRPIN (folded) conformation
+#       → Src phospho drives conformational change by recruiting the C-terminal tail
+#
+# The 4 design tracks test both hypotheses with two backbone variants each:
+#   Track 1A: H1, straight+phos vs pulled-hairpin-apo  (v1 approach)
+#   Track 1B: H2, hairpin+phos  vs straight-apo
+#   Track 2A: H1, straight+phos vs authentic B-hairpin-apo
+#   Track 2B: H2, B-hairpin+phos vs straight-apo
+#
+# WT template (59 aa):
+#   ASSTPLSPTRITRLQEKEDLQELNDRLAVYIDRVRSLETENAGLRLRITESEEVVSREV
+#   Position 30 = Y = phospho-Tyr target (LAVYIDR motif at 27-33 is FIXED)
+# ============================================================================
+
+
+# ── Tool paths ──────────────────────────────────────────────────────────────
+# LigandMPNN v_32_010_25 — sequence design with ligand (phosphate) context.
+# Do NOT change the checkpoint filename: v_32_010_25 is specifically calibrated
+# for ligand-proximal residue design and is the only validated version.
+ligand_mpnn_dir: /path/to/LigandMPNN
+ligand_mpnn_checkpoint: /path/to/LigandMPNN/model_params/ligandmpnn_v_32_010_25.pt
+
+
+# ── Output directories ───────────────────────────────────────────────────────
+output_dir: outputs
+phase1_dir: output/phase1
+
+
+# ── Protein chain and phospho-residue identity ───────────────────────────────
+chain: A
+phospho_resid: 30      # position 30 in the 59-aa construct = Y45 in full LMNA
+phospho_type: TYR      # the de-phosphorylated residue name (for apo PDB generation)
+
+
+# ── LigandMPNN sampling parameters ──────────────────────────────────────────
+# ligand_cutoff_distance: radius (Å) within which residues see the phosphate
+# ligand as a ligand context.  14 Å captures all potential first and second
+# shell contacts including K/R at full sidechain extension.
+ligand_cutoff_distance: 14.0
+
+# mpnn_batch_size: sequences generated per GPU call.  10 is the stable
+# default; increase to 20 only if GPU memory exceeds 16 GB.
+mpnn_batch_size: 10
+
+# mpnn_num_sequences: sequences per (subspace, temperature, state) combination.
+# 5000 → ~1.68M total (7 subspaces × 4 tracks × 6 temps × 2 states × 5000).
+# Reduce to 500 for a quick test run; use 2000 for production.
+mpnn_num_sequences: 5000
+
+# mpnn_temperatures: sampling temperatures to sweep.
+# Low T (0.1-0.2): conservative, low-mutation, near-WT designs.
+# High T (0.4-0.5): diverse, high-mutation designs with novel contact patterns.
+# Full sweep captures both cautious and bold design strategies.
+mpnn_temperatures: [0.1, 0.15, 0.2, 0.3, 0.4, 0.5]
+
+# omit_aa_design: amino acids globally excluded from all design positions.
+# Proline is excluded because it introduces a helix-breaking backbone kink,
+# which would compromise the straight-helix state (State A) that is one of
+# the two functionally relevant conformations.
+omit_aa_design:
+  - P
+
+
+# ── Template sequence ────────────────────────────────────────────────────────
+# The WT 59-aa construct used as reference for mutation counting and deviation
+# scoring.  All designs are measured against this baseline.
+template_seq: ASSTPLSPTRITRLQEKEDLQELNDRLAVYIDRVRSLETENAGLRLRITESEEVVSREV
+
+
+# ── Design subspaces ─────────────────────────────────────────────────────────
+# Motif positions 27-33 (LAVYIDR) are GLOBALLY FIXED across all subspaces.
+# This preserves:
+#   - Kinase recognition (Y at 30 is the phospho-acceptor)
+#   - The aromatic packing of Y30 in both backbone states
+#   - The leucine zipper-like hydrophobic core at positions 27, 31, 34
+#
+# Three designable regions are explored:
+#   ntail (20-25):  6 positions — N-terminal upstream contacts; can create
+#                   apo-state long-range stabilisation; low substitution rate
+#   bend  (40-44):  5 positions — central helix bend region; mutations here
+#                   change the flexibility required for hairpin formation
+#   face  (45-55): 11 positions — the hairpin contact face; these residues
+#                   point toward the phosphate group in the hairpin state and
+#                   are the primary target for H2-type designs
+#
+# Subspaces are tiered by number of designable positions:
+#   Tier 1 (22 pos): full coordinated mechanism — all three regions simultaneously
+#   Tier 2 (11-17 pos): pairwise combinations — two regions at a time
+#   Tier 3 (5-11 pos): single-region surgical designs
+design_subspaces:
+
+  # ── Tier 1 ─────────────────────────────────────────────────────────────────
+  - name: coordinated_full
+    description: >
+      All three mechanism regions jointly designed (ntail + bend + face).
+      Best for capturing cooperative multi-site effects; highest mutation
+      count; requires high temperatures (0.3-0.5) for exploration.
+    positions: [20, 21, 22, 23, 24, 25,
+                40, 41, 42, 43, 44,
+                45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55]
+
+  # ── Tier 2 ─────────────────────────────────────────────────────────────────
+  - name: ntail_plus_face
+    description: >
+      N-tail + hairpin face.  Long-range stabilisation mechanism: the
+      N-terminal tail can form contacts with the phosphate when the hairpin
+      folds, creating an N-cap that reinforces the H2 geometry.  Also useful
+      for H1 designs that want to break these contacts.
+    positions: [20, 21, 22, 23, 24, 25,
+                45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55]
+
+  - name: bend_plus_face
+    description: >
+      Bend + hairpin face.  Controls both hairpin nucleation (flexibility at
+      40-44) and phosphate-contact formation (45-55).  Most direct pathway
+      for H2 mechanism designs.
+    positions: [40, 41, 42, 43, 44,
+                45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55]
+
+  - name: ntail_plus_bend
+    description: >
+      N-tail + bend.  Tests upstream stabilisation without altering the
+      phosphate contact face.  Useful for designs where the face is mostly
+      WT but the conformational equilibrium is tuned by upstream changes.
+    positions: [20, 21, 22, 23, 24, 25,
+                40, 41, 42, 43, 44]
+
+  # ── Tier 3 ─────────────────────────────────────────────────────────────────
+  - name: hairpin_face_only
+    description: >
+      Pure face engineering.  Only the 11 residues on the phosphate-contact
+      face (45-55) are designed.  Produces low-mutation designs (2-5 muts)
+      with high MPNN confidence; most conservative approach.
+    positions: [45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55]
+
+  - name: bend_only
+    description: >
+      Minimal bend site.  Only 5 positions at the central helix-to-hairpin
+      bend (40-44).  Very targeted: tests whether hairpin nucleation alone
+      changes the switch without altering the contact face.
+    positions: [40, 41, 42, 43, 44]
+
+  - name: ntail_only
+    description: >
+      Pure N-tail.  6 upstream positions (20-25).  Explores long-range
+      apo-state contacts only; produces the most WT-like designs.
+      Useful as a sensitivity control: if ntail-only designs score well,
+      the contact face may be less important than upstream packing.
+    positions: [20, 21, 22, 23, 24, 25]
